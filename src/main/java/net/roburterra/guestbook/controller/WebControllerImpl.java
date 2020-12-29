@@ -1,10 +1,13 @@
 package net.roburterra.guestbook.controller;
 
+import net.roburterra.guestbook.service.IPBlocker;
 import net.roburterra.guestbook.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class WebControllerImpl {
@@ -12,15 +15,22 @@ public class WebControllerImpl {
     @Autowired
     MessageService messageService;
 
+    @Autowired
+    IPBlocker ipBlocker;
+
     @PostMapping("/guestbook")
-    ResponseEntity newPost(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("message") String message) {
+    ResponseEntity newPost(@RequestParam("name") String name,
+                           @RequestParam("email") String email,
+                           @RequestParam("message") String message,
+                           HttpServletRequest request) {
         if (name == null || name.isBlank())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not a valid name");
         if (!validEmail(email))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not a valid email");
         if (message == null || message.isBlank())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not a valid message");
-
+        if (ipBlocker.isBlocked(request.getRemoteAddr()))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
         messageService.newMessage(name,email,message);
         return ResponseEntity.status(HttpStatus.CREATED).build();
