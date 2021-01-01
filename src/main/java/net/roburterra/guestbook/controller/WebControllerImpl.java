@@ -18,6 +18,7 @@ public class WebControllerImpl {
     @Autowired
     IPBlocker ipBlocker;
 
+    @CrossOrigin
     @PostMapping("/guestbook")
     ResponseEntity newPost(@RequestParam("name") String name,
                            @RequestParam("email") String email,
@@ -36,6 +37,7 @@ public class WebControllerImpl {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @CrossOrigin
     @GetMapping("/guestbook")
     ResponseEntity getPosts(){
         return  ResponseEntity.ok(messageService.getMessages());
