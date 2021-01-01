@@ -14,8 +14,8 @@ public class MessageService {
     @Autowired
     GuestbookMessageRepository guestbookMessageRepository;
 
-    public void newMessage(String name, String email, String message) {
-        guestbookMessageRepository.save(new GuestbookMessage(name,email,message));
+    public void newMessage(String name, String message) {
+        guestbookMessageRepository.save(new GuestbookMessage(name, message));
     }
 
     public List<GuestbookMessage> getMessages(){

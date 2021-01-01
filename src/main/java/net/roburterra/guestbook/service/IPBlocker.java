@@ -18,7 +18,7 @@ public class IPBlocker {
     //default 3600000*12 which is 12 hours
     private static Long banDuration;
 
-    private Log log = LogFactory.getLog(getClass());
+    private final Log log = LogFactory.getLog(getClass());
 
     private Map<String, Long> blockedAddresses;
 
@@ -41,6 +41,8 @@ public class IPBlocker {
         if (blockedAddresses.containsKey(ipaddress)) {
             return !banDurationFinnished(ipaddress);
         } else {
+            System.out.println("*** Banning address " + ipaddress);
+            log.debug("*** Banning address " + ipaddress);
             blockedAddresses.put(ipaddress,System.currentTimeMillis());
             return false;
         }

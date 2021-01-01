@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 public class GuestbookMessage {
 
-    private String name,email,message,response;
+    private String name,message,response;
 
     private Date timestamp;
 
@@ -24,10 +24,9 @@ public class GuestbookMessage {
         return timestamp;
     }
 
-    public GuestbookMessage(String name, String email, String message) {
+    public GuestbookMessage(String name, String message) {
         this.timestamp = new Date();
         setName(name);
-        setEmail(email);
         setMessage(message);
     }
 
@@ -42,14 +41,6 @@ public class GuestbookMessage {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) { //simple verification
-        this.email = email;
-    }
-
     public String getMessage() {
         return message;
     }
@@ -61,6 +52,9 @@ public class GuestbookMessage {
     }
 
     public String getResponse() {
+        if (response == null) {
+            return "";
+        }
         return response;
     }
 }

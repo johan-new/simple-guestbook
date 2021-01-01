@@ -1,5 +1,6 @@
 package net.roburterra.guestbook.controller;
 
+import net.roburterra.guestbook.domain.GuestbookMessage;
 import net.roburterra.guestbook.service.IPBlocker;
 import net.roburterra.guestbook.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 public class WebControllerImpl {
@@ -21,32 +24,25 @@ public class WebControllerImpl {
     @CrossOrigin
     @PostMapping("/guestbook")
     ResponseEntity newPost(@RequestParam("name") String name,
-                           @RequestParam("email") String email,
                            @RequestParam("message") String message,
                            HttpServletRequest request) {
-        if (name == null || name.isBlank())
+        if (name == null || name.isBlank() || message.length() < 3)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not a valid name");
-        if (!validEmail(email))
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not a valid email");
-        if (message == null || message.isBlank())
+        if (message == null || message.isBlank() || message.length() < 3)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not a valid message");
         if (ipBlocker.isBlocked(request.getRemoteAddr()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
-        messageService.newMessage(name,email,message);
+        messageService.newMessage(name,message);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @CrossOrigin
     @GetMapping("/guestbook")
     ResponseEntity getPosts(){
-        return  ResponseEntity.ok(messageService.getMessages());
-    }
-
-    private boolean validEmail(String email) {
-        return email.contains("@") && email.contains(".") &&
-                !email.startsWith(".") && !email.endsWith(".") &&
-                !email.startsWith("@") && !email.endsWith("@");
+        List<GuestbookMessage> responseContent = messageService.getMessages();
+        Collections.reverse(responseContent);
+        return  ResponseEntity.ok(responseContent);
     }
 
 }
