@@ -1,12 +1,10 @@
 package net.roburterra.guestbook.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name="GuestbookMessages")
 public class GuestbookMessage {
 
     private String name,message,response;
