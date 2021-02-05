@@ -41,7 +41,6 @@ public class IPBlocker {
         if (blockedAddresses.containsKey(ipaddress)) {
             return !banDurationFinnished(ipaddress);
         } else {
-            System.out.println("*** Banning address " + ipaddress);
             log.debug("*** Banning address " + ipaddress);
             blockedAddresses.put(ipaddress,System.currentTimeMillis());
             return false;
