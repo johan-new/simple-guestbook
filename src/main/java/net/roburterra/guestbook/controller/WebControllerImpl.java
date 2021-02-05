@@ -3,6 +3,7 @@ package net.roburterra.guestbook.controller;
 import net.roburterra.guestbook.domain.GuestbookMessage;
 import net.roburterra.guestbook.service.IPBlocker;
 import net.roburterra.guestbook.service.MessageService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class WebControllerImpl {
     ResponseEntity getPosts(){
         List<GuestbookMessage> responseContent = messageService.getMessages();
         Collections.reverse(responseContent);
-        return  ResponseEntity.ok(responseContent);
+        return  ResponseEntity.ok(new JSONObject(responseContent.toMap));
     }
 
 }
