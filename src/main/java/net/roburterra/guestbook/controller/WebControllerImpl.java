@@ -41,9 +41,9 @@ public class WebControllerImpl {
     @CrossOrigin
     @GetMapping("/guestbook")
     ResponseEntity getPosts(){
-        List<GuestbookMessage> responseContent = messageService.getMessages();
+        List<String> responseContent = messageService.getMessages();
         Collections.reverse(responseContent);
-        return  ResponseEntity.ok(new JSONObject(responseContent.toMap));
+        return  ResponseEntity.ok(responseContent.toString());
     }
 
 }
